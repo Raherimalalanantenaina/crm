@@ -10,7 +10,7 @@ import site.easy.to.build.crm.entity.Ticket;
 import java.util.List;
 
 @Service
-public class TicketServiceImpl implements TicketService{
+public class TicketServiceImpl implements TicketService {
 
     private final TicketRepository ticketRepository;
 
