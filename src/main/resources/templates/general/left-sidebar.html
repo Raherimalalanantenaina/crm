@@ -113,20 +113,18 @@
                         <li><a th:href="${home + 'employee/customer/create-customer'}">Create customer</a></li>
                     </ul>
                 </li>
-                <li class="nav-small-cap" th:if="${#authorization.expression('hasRole(''ROLE_MANAGER'')')}">--- Data</li>
-                <li th:if="${#authorization.expression('hasRole(''ROLE_MANAGER'')')}">
-                    <a class="waves-effect waves-dark" th:href="${home + 'manager/reinitialisation'}">
-                        <i class="fas fa-pencil-alt"></i>
-                        <span class="hide-menu">ResetData</span>
+                <li th:if="${#authorization.expression('hasRole(''ROLE_MANAGER'')')}" class="nav-small-cap">--- Data
+                </li>
+                <li>
+                    <a th:if="${#authorization.expression('hasRole(''ROLE_MANAGER'')')}"
+                        class="has-arrow waves-effect waves-dark" href="javascript:void(0)">
+                        <i class="fas fa-users"></i>
+                        <span class="hide-menu">Data</span>
                     </a>
-                    <a class="waves-effect waves-dark" th:href="${home + 'manager/generateData'}">
-                        <i class="fas fa-pencil-alt"></i>
-                        <span class="hide-menu">GenerateData</span>
-                    </a>
-                    <a class="waves-effect waves-dark" th:href="${home + 'manager/importCsv'}">
-                        <i class="fas fa-pencil-alt"></i>
-                        <span class="hide-menu">ImportCsv</span>
-                    </a>
+                    <ul th:if="${#authorization.expression('hasRole(''ROLE_MANAGER'')')}" class="collapse">
+                        <li><a th:href="${home + 'manager/reinitialisation'}">ResetData</a></li>
+                        <li><a th:href="${home + 'manager/import'}">ImportCsv</a></li>
+                    </ul>
                 </li>
                 <li class="nav-small-cap">--- Tickets</li>
                 <li>

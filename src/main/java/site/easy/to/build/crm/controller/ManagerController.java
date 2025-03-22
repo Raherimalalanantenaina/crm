@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import site.easy.to.build.crm.entity.*;
 import site.easy.to.build.crm.google.service.gmail.GoogleGmailApiService;
@@ -287,4 +288,24 @@ public class ManagerController {
         // Rediriger vers la page de réinitialisation
         return "redirect:/manager/reinitialisation";
     }
+
+    @GetMapping("/manager/import")
+    public String showImportPage(){
+        return "import";
+    }
+
+
+    @PostMapping("/import/csv")
+    public String handleCsvUpload(@RequestParam("file") MultipartFile file, Model model) {
+        if (file.isEmpty()) {
+            model.addAttribute("message", "Veuillez sélectionner un fichier CSV.");
+            return "import";
+        }
+        if(!file.getContentType().equals("text/csv")){
+            model.addAttribute("message", "Le fichier doit être au format CSV.");
+            return "import";
+        }
+        return "import";
+    }
+
 }
