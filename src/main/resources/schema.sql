@@ -505,3 +505,17 @@ CREATE TABLE IF NOT EXISTS `google_drive_file` (
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+
+CREATE TABLE IF NOT EXISTS 'trigger_lead_histo'(
+   'lead_id' INT,
+   'name' VARCHAR(255) ,
+   'phone' VARCHAR(20) ,
+   'status' VARCHAR(50) ,
+   'meeting_id' VARCHAR(255) ,
+   'google_drive' TINYINT(1),
+   'google_drive_folder_id' VARCHAR(255) ,
+   'delete_at' DATE NOT NULL,
+   PRIMARY KEY(lead_id),
+   UNIQUE(meeting_id)
+);
