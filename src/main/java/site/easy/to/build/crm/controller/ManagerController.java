@@ -12,9 +12,11 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import site.easy.to.build.crm.entity.*;
 import site.easy.to.build.crm.google.service.gmail.GoogleGmailApiService;
+import site.easy.to.build.crm.service.ReinitialisationData.ReinitialisationDataService;
 import site.easy.to.build.crm.service.role.RoleService;
 import site.easy.to.build.crm.service.user.UserProfileService;
 import site.easy.to.build.crm.service.user.UserService;
@@ -35,10 +37,12 @@ public class ManagerController {
     private final GoogleGmailApiService googleGmailApiService;
     private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
+    private final ReinitialisationDataService reinitialisationDataService;
 
     @Autowired
     public ManagerController(AuthenticationUtils authenticationUtils, UserProfileService userProfileService, UserService userService,
-                             Environment environment, GoogleGmailApiService googleGmailApiService, RoleService roleService, PasswordEncoder passwordEncoder) {
+                             Environment environment, GoogleGmailApiService googleGmailApiService, RoleService roleService, PasswordEncoder passwordEncoder,
+            ReinitialisationDataService reinitialisationDataService) {
         this.authenticationUtils = authenticationUtils;
         this.userProfileService = userProfileService;
         this.userService = userService;
@@ -46,6 +50,7 @@ public class ManagerController {
         this.googleGmailApiService = googleGmailApiService;
         this.roleService = roleService;
         this.passwordEncoder = passwordEncoder;
+        this.reinitialisationDataService = reinitialisationDataService;
     }
 
     @GetMapping("/manager/all-users")
@@ -264,4 +269,43 @@ public class ManagerController {
         }
         return "redirect:/login";
     }
+    
+    @GetMapping("/manager/reinitialisation")
+    public String showReinitialisationPage(Model model) {
+        // Vous pouvez ajouter des données au modèle si nécessaire
+        return "reinitialisation"; // Nom de la vue Thymeleaf
+    }
+
+    // Traiter la demande de réinitialisation
+    @PostMapping("/manager/resetData")
+    public String resetData(RedirectAttributes redirectAttributes) {
+        // Appeler la méthode de réinitialisation
+        String result = reinitialisationDataService.resetData();
+
+        // Ajouter le résultat à RedirectAttributes pour l'afficher après la redirection
+        redirectAttributes.addFlashAttribute("datareponse", result);
+
+        // Rediriger vers la page de réinitialisation
+        return "redirect:/manager/reinitialisation";
+    }
+
+    @GetMapping("/manager/import")
+    public String showImportPage(){
+        return "import";
+    }
+
+
+    @PostMapping("/import/csv")
+    public String handleCsvUpload(@RequestParam("file") MultipartFile file, Model model) {
+        if (file.isEmpty()) {
+            model.addAttribute("message", "Veuillez sélectionner un fichier CSV.");
+            return "import";
+        }
+        if(!file.getContentType().equals("text/csv")){
+            model.addAttribute("message", "Le fichier doit être au format CSV.");
+            return "import";
+        }
+        return "import";
+    }
+
 }

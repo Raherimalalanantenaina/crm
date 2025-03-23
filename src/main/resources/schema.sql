@@ -505,3 +505,28 @@ CREATE TABLE IF NOT EXISTS `google_drive_file` (
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+
+-- Table trigger_lead_histo
+CREATE TABLE IF NOT EXISTS `trigger_lead_histo` (
+    `id` INT,
+    `name` VARCHAR(255),
+    `phone` VARCHAR(20),
+    `status` VARCHAR(50),
+    `meeting_id` VARCHAR(255),
+    `google_drive` TINYINT(1),
+    `google_drive_folder_id` VARCHAR(255),
+    `delete_at` datetime DEFAULT NULL,
+    PRIMARY KEY (`id`), -- Utilisez `id` comme clé primaire
+    UNIQUE (`meeting_id`)
+);
+
+-- Table lead_expense
+CREATE TABLE IF NOT EXISTS `lead_expense` (
+    `id` INT AUTO_INCREMENT,
+    `amount` DECIMAL(18, 2) NOT NULL,
+    `created_at` datetime DEFAULT NULL,
+    `trigger_lead_histo_id` INT NOT NULL, -- Renommez pour plus de clarté
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`trigger_lead_histo_id`) REFERENCES `trigger_lead_histo`(`id`)
+);
