@@ -28,6 +28,8 @@ public class ReinitialisationDataRepository {
             entityManager.createNativeQuery("TRUNCATE TABLE ticket_settings;").executeUpdate();
             entityManager.createNativeQuery("TRUNCATE TABLE file;").executeUpdate();
             entityManager.createNativeQuery("TRUNCATE TABLE google_drive_file;").executeUpdate();
+            entityManager.createNativeQuery("TRUNCATE TABLE trigger_lead_histo;").executeUpdate();
+            entityManager.createNativeQuery("TRUNCATE TABLE lead_expense;").executeUpdate();
             entityManager.createNativeQuery("SET FOREIGN_KEY_CHECKS = 1;").executeUpdate();
         } catch (Exception e) {
             return "Failed to Reset :" + e.getMessage();
