@@ -38,6 +38,15 @@ public class TriggerLeadHisto {
     @Column(name = "meeting_id", length = 255, unique = true)
     private String meetingId;
 
+    @Column(name = "google_drive")
+    private Boolean googleDrive;
+
+    @Column(name = "google_drive_folder_id", length = 255)
+    private String googleDriveFolderId;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
     @Column(name = "delete_at")
     private LocalDateTime deleteAt;
 
