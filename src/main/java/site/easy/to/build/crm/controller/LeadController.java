@@ -233,7 +233,19 @@ public class LeadController {
         if (lead.getGoogleDrive() != null) {
             fileUtil.saveGoogleDriveFiles(authentication, allFiles, folderId, createdLead);
         }
-        TriggerLeadHisto triggerLeadHisto=new TriggerLeadHisto(createdLead.getLeadId(),createdLead.getName(),createdLead.getPhone(),createdLead.getStatus(),createdLead.getMeetingId(), createdLead.getGoogleDrive(), createdLead.getGoogleDriveFolderId());
+        TriggerLeadHisto triggerLeadHisto = new TriggerLeadHisto();
+        triggerLeadHisto.setId(createdLead.getLeadId());
+        triggerLeadHisto.setCustomer(customer);
+        triggerLeadHisto.setUser(manager);
+        triggerLeadHisto.setName(createdLead.getName());
+        triggerLeadHisto.setPhone(createdLead.getPhone());
+        triggerLeadHisto.setEmployee(employee);
+        triggerLeadHisto.setStatus(createdLead.getStatus());
+        triggerLeadHisto.setMeetingId(createdLead.getMeetingId());
+        triggerLeadHisto.setGoogleDrive(createdLead.getGoogleDrive());
+        triggerLeadHisto.setGoogleDriveFolderId(createdLead.getGoogleDriveFolderId());
+        triggerLeadHisto.setCreatedAt(createdLead.getCreatedAt());
+        triggerLeadHisto.setDeleteAt(null);
         TriggerLeadHisto createTriggerLeadHisto = triggerLeadHistoService.save(triggerLeadHisto);
         LeadExpense leadExpense=new LeadExpense();
         leadExpense.setAmount(expense);
