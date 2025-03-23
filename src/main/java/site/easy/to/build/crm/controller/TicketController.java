@@ -17,6 +17,8 @@ import site.easy.to.build.crm.google.service.acess.GoogleAccessService;
 import site.easy.to.build.crm.google.service.gmail.GoogleGmailApiService;
 import site.easy.to.build.crm.service.customer.CustomerService;
 import site.easy.to.build.crm.service.settings.TicketEmailSettingsService;
+import site.easy.to.build.crm.service.ticket.TicketExpenseService;
+import site.easy.to.build.crm.service.ticket.TicketHistoService;
 import site.easy.to.build.crm.service.ticket.TicketService;
 import site.easy.to.build.crm.service.user.UserService;
 import site.easy.to.build.crm.util.*;
@@ -24,6 +26,7 @@ import site.easy.to.build.crm.util.*;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.security.GeneralSecurityException;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -41,11 +44,15 @@ public class TicketController {
     private final TicketEmailSettingsService ticketEmailSettingsService;
     private final GoogleGmailApiService googleGmailApiService;
     private final EntityManager entityManager;
-
+    private final TicketHistoService ticketHistoService;
+    private final TicketExpenseService ticketExpenseService;
 
     @Autowired
-    public TicketController(TicketService ticketService, AuthenticationUtils authenticationUtils, UserService userService, CustomerService customerService,
-                            TicketEmailSettingsService ticketEmailSettingsService, GoogleGmailApiService googleGmailApiService, EntityManager entityManager) {
+    public TicketController(TicketService ticketService, AuthenticationUtils authenticationUtils,
+            UserService userService, CustomerService customerService,
+            TicketEmailSettingsService ticketEmailSettingsService, GoogleGmailApiService googleGmailApiService,
+            EntityManager entityManager, TicketHistoService ticketHistoService,
+            TicketExpenseService ticketExpenseService) {
         this.ticketService = ticketService;
         this.authenticationUtils = authenticationUtils;
         this.userService = userService;
@@ -53,6 +60,8 @@ public class TicketController {
         this.ticketEmailSettingsService = ticketEmailSettingsService;
         this.googleGmailApiService = googleGmailApiService;
         this.entityManager = entityManager;
+        this.ticketHistoService = ticketHistoService;
+        this.ticketExpenseService = ticketExpenseService;
     }
 
     @GetMapping("/show-ticket/{id}")
@@ -71,8 +80,10 @@ public class TicketController {
         if(!AuthorizationUtil.checkIfUserAuthorized(employee,loggedInUser) && !AuthorizationUtil.hasRole(authentication, "ROLE_MANAGER")) {
             return "error/access-denied";
         }
+        TicketExpense ticketExpense = ticketExpenseService.getLatestExpenseForTicketHisto(ticket.getTicketId());
 
-        model.addAttribute("ticket",ticket);
+        model.addAttribute("ticket", ticket);
+        model.addAttribute("ticketExpense", ticketExpense);
         return "ticket/show-ticket";
     }
 
@@ -124,7 +135,7 @@ public class TicketController {
 
     @PostMapping("/create-ticket")
     public String createTicket(@ModelAttribute("ticket") @Validated Ticket ticket, BindingResult bindingResult, @RequestParam("customerId") int customerId,
-                               @RequestParam Map<String, String> formParams, Model model,
+                               @RequestParam Map<String, String> formParams, Model model, @RequestParam("expense_ticket") BigDecimal expense,
                                @RequestParam("employeeId") int employeeId, Authentication authentication) {
 
         int userId = authenticationUtils.getLoggedInUserId(authentication);
@@ -169,7 +180,18 @@ public class TicketController {
         ticket.setEmployee(employee);
         ticket.setCreatedAt(LocalDateTime.now());
 
-        ticketService.save(ticket);
+        Ticket ticket1 = ticketService.save(ticket);
+
+        TicketHisto ticketHisto = new TicketHisto(ticket1.getTicketId(), ticket1.getSubject(), ticket1.getSubject(),
+                ticket1.getStatus(), ticket1.getPriority(), ticket1.getManager(), ticket1.getEmployee(),
+                ticket1.getCustomer(), ticket1.getCreatedAt());
+        TicketHisto ticketHisto1 = ticketHistoService.save(ticketHisto);
+
+        TicketExpense ticketExpense = new TicketExpense();
+        ticketExpense.setTicketHisto(ticketHisto1);
+        ticketExpense.setAmount(expense);
+        ticketExpense.setCreatedAt(LocalDateTime.now());
+        ticketExpenseService.save(ticketExpense);
 
         return "redirect:/employee/ticket/assigned-tickets";
     }
