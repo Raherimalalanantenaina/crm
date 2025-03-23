@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Table(name = "lead_expense")
 public class LeadExpense {
     @Id
-    // @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
 
