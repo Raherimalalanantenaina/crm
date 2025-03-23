@@ -34,6 +34,9 @@ public class TriggerLeadHisto {
     @Column(name = "delete_at")
     private LocalDateTime deleteAt;
 
+    public TriggerLeadHisto() {
+    }
+
     public TriggerLeadHisto(Integer id,String name, String phone, String status, 
             String meetingId, Boolean googleDrive,
             String googleDriveFolderId) {
