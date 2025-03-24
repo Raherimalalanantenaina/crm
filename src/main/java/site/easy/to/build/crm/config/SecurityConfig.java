@@ -55,6 +55,12 @@ public class SecurityConfig {
 
         http.csrf((csrf) -> csrf
                 .csrfTokenRepository(httpSessionCsrfTokenRepository)
+                .ignoringRequestMatchers("/api/leads/all")
+                .ignoringRequestMatchers("/api/leads/**")
+                .ignoringRequestMatchers("/api/lead-expenses/**")
+                .ignoringRequestMatchers("/api/lead-expenses/leadExpense/**")
+                .ignoringRequestMatchers("/api/lead-expenses/update")
+                .ignoringRequestMatchers("/api/leads/delete-lead")
         );
 
         http.
@@ -72,6 +78,12 @@ public class SecurityConfig {
                         .requestMatchers(AntPathRequestMatcher.antMatcher("/**/manager/**")).hasRole("MANAGER")
                         .requestMatchers("/employee/**").hasAnyRole("MANAGER", "EMPLOYEE")
                         .requestMatchers("/customer/**").hasRole("CUSTOMER")
+                        .requestMatchers("/api/leads/all").permitAll()
+                        .requestMatchers("/api/leads/**").permitAll()
+                        .requestMatchers("/api/lead-expenses/**").permitAll()
+                        .requestMatchers("/api/lead-expenses/leadExpense/**").permitAll()
+                        .requestMatchers("/api/lead-expenses/update").permitAll()
+                        .requestMatchers("/api/leads/delete-lead").permitAll()
                         .anyRequest().authenticated()
                 )
 
