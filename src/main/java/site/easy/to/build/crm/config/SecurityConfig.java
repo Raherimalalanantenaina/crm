@@ -60,7 +60,8 @@ public class SecurityConfig {
                 .ignoringRequestMatchers("/api/lead-expenses/**")
                 .ignoringRequestMatchers("/api/lead-expenses/leadExpense/**")
                 .ignoringRequestMatchers("/api/lead-expenses/update")
-                .ignoringRequestMatchers("/api/leads/delete-lead")
+                .ignoringRequestMatchers("/api/**")
+                
         );
 
         http.
@@ -84,6 +85,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/lead-expenses/leadExpense/**").permitAll()
                         .requestMatchers("/api/lead-expenses/update").permitAll()
                         .requestMatchers("/api/leads/delete-lead").permitAll()
+                        .requestMatchers("/api/**").permitAll()
                         .anyRequest().authenticated()
                 )
 
