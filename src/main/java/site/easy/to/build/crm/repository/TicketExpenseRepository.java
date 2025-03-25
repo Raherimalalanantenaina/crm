@@ -11,5 +11,5 @@ import java.util.Optional;
 @Repository
 public interface TicketExpenseRepository extends JpaRepository<TicketExpense, Integer> {
     @Query(value = "SELECT * FROM ticket_expense WHERE ticket_histo_id = :idTicketHisto ORDER BY created_at DESC LIMIT 1", nativeQuery = true)
-    TicketExpense findByIdHistoDateMax(@Param("idTicketHisto") int idTicketHisto);
+    Optional<TicketExpense> findByIdHistoDateMax(@Param("idTicketHisto") int idTicketHisto);
 }

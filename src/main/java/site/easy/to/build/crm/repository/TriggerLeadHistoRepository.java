@@ -17,6 +17,8 @@ public interface TriggerLeadHistoRepository extends JpaRepository<TriggerLeadHis
     //     @Param("endDate") LocalDateTime endDate
     // );
 
+    List<TriggerLeadHisto> findByCustomerCustomerId(int idCustomer);
+
     List<TriggerLeadHisto> findByCreatedAtBetween(LocalDateTime startDate, LocalDateTime endDate);
 
     List<TriggerLeadHisto> findByDeleteAtIsNull();

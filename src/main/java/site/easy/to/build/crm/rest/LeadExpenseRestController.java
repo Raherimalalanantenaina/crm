@@ -9,6 +9,7 @@ import site.easy.to.build.crm.entity.LeadExpense;
 import site.easy.to.build.crm.entity.TriggerLeadHisto;
 import site.easy.to.build.crm.service.lead.LeadExpenseService;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,7 +55,7 @@ public class LeadExpenseRestController {
             // 3. Mettre à jour les champs
             LeadExpense expenseToUpdate = new LeadExpense();
             expenseToUpdate.setAmount(updateDto.getAmount());
-            expenseToUpdate.setCreatedAt(updateDto.getCreatedAt());
+            expenseToUpdate.setCreatedAt(LocalDateTime.now());
             expenseToUpdate.setTriggerLeadHisto(leadhisto);
             LeadExpense updatedExpense = leadExpenseService.save(expenseToUpdate);
 
