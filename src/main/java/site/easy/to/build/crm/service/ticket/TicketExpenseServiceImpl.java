@@ -1,6 +1,8 @@
 package site.easy.to.build.crm.service.ticket;
 
 import org.springframework.stereotype.Service;
+
+import site.easy.to.build.crm.entity.LeadExpense;
 import site.easy.to.build.crm.entity.TicketExpense;
 import site.easy.to.build.crm.repository.TicketExpenseRepository;
 
@@ -21,8 +23,19 @@ public class TicketExpenseServiceImpl implements TicketExpenseService{
     }
 
     @Override
-    public TicketExpense getLatestExpenseForTicketHisto(int ticketHistoId) {
-        TicketExpense latestExpense = ticketExpenseRepository.findByIdHistoDateMax(ticketHistoId);
+    public Optional<TicketExpense> getLatestExpenseForTicketHisto(int ticketHistoId) {
+        Optional<TicketExpense> latestExpense = ticketExpenseRepository.findByIdHistoDateMax(ticketHistoId);
         return latestExpense;
+    }
+
+    @Override
+    public TicketExpense findById(int id) {
+        Optional<TicketExpense> result = ticketExpenseRepository.findById(id);
+
+        if (result.isEmpty()) {
+            throw new RuntimeException("Dépense non trouvée avec l'ID: " + id);
+        }
+
+        return result.get();
     }
 }
