@@ -21,8 +21,8 @@ public class TicketExpenseServiceImpl implements TicketExpenseService{
     }
 
     @Override
-    public TicketExpense getLatestExpenseForTicketHisto(int ticketHistoId) {
-        TicketExpense latestExpense = ticketExpenseRepository.findByIdHistoDateMax(ticketHistoId);
+    public Optional<TicketExpense> getLatestExpenseForTicketHisto(int ticketHistoId) {
+        Optional<TicketExpense> latestExpense = ticketExpenseRepository.findByIdHistoDateMax(ticketHistoId);
         return latestExpense;
     }
 }

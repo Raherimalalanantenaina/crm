@@ -581,3 +581,10 @@ CREATE TABLE IF NOT EXISTS `budget`(
    PRIMARY KEY(id),
    FOREIGN KEY(`customer_id`) REFERENCES customer(`customer_id`)
 )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE IF NOT EXISTS `rate_config` (
+   `id` INT AUTO_INCREMENT,
+   `rate` DECIMAL(15,2)   NOT NULL,
+   `created_at`  DATE NOT NULL,
+   PRIMARY KEY(`id` )
+);
