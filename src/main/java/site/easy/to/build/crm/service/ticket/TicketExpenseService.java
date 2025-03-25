@@ -9,4 +9,6 @@ public interface TicketExpenseService {
     TicketExpense save(TicketExpense ticketExpense);
 
     Optional<TicketExpense> getLatestExpenseForTicketHisto(int ticketHistoId);
+
+    public TicketExpense findById(int id);
 }
