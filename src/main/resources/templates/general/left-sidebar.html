@@ -124,7 +124,7 @@
                     </a>
                     <ul th:if="${#authorization.expression('hasRole(''ROLE_MANAGER'')')}" class="collapse">
                         <li><a th:href="${home + 'manager/reinitialisation'}">ResetData</a></li>
-                        <li><a th:href="${home + 'manager/import'}">ImportCsv</a></li>
+                        <li><a th:href="${home + 'database/import'}">ImportCsv</a></li>
                     </ul>
                 </li>
                 <li class="nav-small-cap">--- Tickets</li>
