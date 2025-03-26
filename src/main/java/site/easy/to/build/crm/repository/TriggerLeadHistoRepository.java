@@ -11,11 +11,14 @@ import java.time.LocalDateTime;
 import java.util.List;
 @Repository
 public interface TriggerLeadHistoRepository extends JpaRepository<TriggerLeadHisto, Long> {
-    // @Query("SELECT tlh FROM TriggerLeadHisto tlh WHERE tlh.createdAt BETWEEN :startDate AND :endDate")
-    // List<TriggerLeadHisto> findBetweenDate(
-    //     @Param("startDate") LocalDateTime startDate,
-    //     @Param("endDate") LocalDateTime endDate
-    // );
+    @Query("SELECT t FROM TriggerLeadHisto t " +
+            "WHERE (:date1 IS NULL AND :date2 IS NULL AND t.deleteAt IS NULL) " + // Cas où les deux dates sont null
+            "OR (:date1 IS NOT NULL OR :date2 IS NOT NULL) " + // Cas où au moins une date est non-null
+            "AND (t.createdAt <= COALESCE(:date2, CURRENT_TIMESTAMP)) " +
+            "AND (t.deleteAt IS NULL OR t.deleteAt >= COALESCE(:date1, t.createdAt))")
+    List<TriggerLeadHisto> getBetweenDate(
+            @Param("date1") LocalDateTime date1,
+            @Param("date2") LocalDateTime date2);
 
     List<TriggerLeadHisto> findByCustomerCustomerId(int idCustomer);
 

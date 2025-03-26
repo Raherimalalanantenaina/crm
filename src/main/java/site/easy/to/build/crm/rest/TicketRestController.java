@@ -1,6 +1,7 @@
 package site.easy.to.build.crm.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -63,5 +64,29 @@ public class TicketRestController {
     ) {
         List<TicketHisto> ticketHistos = ticketHistoService.getBetweenDate(date1, date2);
         return ResponseEntity.ok(ticketHistos);
+    }
+
+     @GetMapping("/condition")
+    public ResponseEntity<List<TicketHisto>> getAllHistoriqueBetweenDate(
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date1,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date2
+    ) {
+        try {
+            // Validation des dates
+            if (date1 == null || date2 == null) {
+                throw new IllegalArgumentException("Les deux dates sont requises");
+            }
+
+            if (date1.isAfter(date2)) {
+                throw new IllegalArgumentException("La date de début doit être avant la date de fin");
+            }
+
+            List<TicketHisto> ticketHistos = ticketHistoService.getBetweenDate(date1, date2);
+            return ResponseEntity.ok(ticketHistos);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
     }
 }

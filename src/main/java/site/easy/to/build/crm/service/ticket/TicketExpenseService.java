@@ -1,6 +1,8 @@
 package site.easy.to.build.crm.service.ticket;
 
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import site.easy.to.build.crm.entity.TicketExpense;
@@ -10,5 +12,6 @@ public interface TicketExpenseService {
 
     Optional<TicketExpense> getLatestExpenseForTicketHisto(int ticketHistoId);
 
+    BigDecimal getTotalExpensesBetweenDates(LocalDateTime startDate, LocalDateTime endDate);
     public TicketExpense findById(int id);
 }
