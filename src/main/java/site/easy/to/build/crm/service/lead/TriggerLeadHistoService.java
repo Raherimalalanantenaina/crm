@@ -21,5 +21,7 @@ public interface TriggerLeadHistoService {
 
     void delete(Integer id);
 
+    public List<TriggerLeadHisto> getTriggerLeadHistoBetweenDates(LocalDateTime startDate, LocalDateTime endDate);
+
     public void softDelete(Integer id);
 }

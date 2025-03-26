@@ -1,5 +1,6 @@
 package site.easy.to.build.crm.rest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,6 +10,7 @@ import site.easy.to.build.crm.entity.LeadExpense;
 import site.easy.to.build.crm.entity.TriggerLeadHisto;
 import site.easy.to.build.crm.service.lead.LeadExpenseService;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -50,7 +52,7 @@ public class LeadExpenseRestController {
             if (updateDto == null) {
                 return ResponseEntity.badRequest().build();
             }
-            TriggerLeadHisto leadhisto=new TriggerLeadHisto();
+            TriggerLeadHisto leadhisto = new TriggerLeadHisto();
             leadhisto.setId(updateDto.getLeadId());
             // 3. Mettre à jour les champs
             LeadExpense expenseToUpdate = new LeadExpense();
@@ -61,10 +63,19 @@ public class LeadExpenseRestController {
 
             // 5. Retourner la réponse
             return ResponseEntity.ok(updatedExpense);
-            
+
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
         }
+    }
+    
+    @GetMapping("/total")
+    public ResponseEntity<BigDecimal> getTotalExpenses(
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
+
+        BigDecimal total = leadExpenseService.getTotalExpensesBetweenDates(startDate, endDate);
+        return ResponseEntity.ok(total);
     }
 
     // Créer une nouvelle dépense pour un lead
